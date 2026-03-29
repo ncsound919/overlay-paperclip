@@ -1,6 +1,31 @@
 export const COMPANY_STATUSES = ["active", "paused", "archived"] as const;
 export type CompanyStatus = (typeof COMPANY_STATUSES)[number];
 
+export const COMPANY_INDUSTRIES = [
+  "biotech",
+  "blockchain_crypto_finance",
+  "day_trading",
+  "logistics",
+  "supply_chain",
+  "music_publishing",
+  "software_development",
+  "video_game_development",
+  "other",
+] as const;
+export type CompanyIndustry = (typeof COMPANY_INDUSTRIES)[number];
+
+export const COMPANY_INDUSTRY_LABELS: Record<CompanyIndustry, string> = {
+  biotech: "Biotech",
+  blockchain_crypto_finance: "Blockchain / Crypto / Finance",
+  day_trading: "Day Trading",
+  logistics: "Logistics",
+  supply_chain: "Supply Chain",
+  music_publishing: "Music Publishing",
+  software_development: "Software Development",
+  video_game_development: "Video Game Development",
+  other: "Other",
+};
+
 export const DEPLOYMENT_MODES = ["local_trusted", "authenticated"] as const;
 export type DeploymentMode = (typeof DEPLOYMENT_MODES)[number];
 
@@ -46,6 +71,39 @@ export const AGENT_ROLES = [
   "devops",
   "researcher",
   "general",
+  // Biotech
+  "scientist",
+  "bioinformatician",
+  "lab_manager",
+  "regulatory_specialist",
+  // Blockchain / Crypto / Finance
+  "blockchain_developer",
+  "smart_contract_auditor",
+  "tokenomics_analyst",
+  "compliance_officer",
+  // Day Trading / Quant Finance
+  "quant_analyst",
+  "algo_trader",
+  "risk_manager",
+  // Logistics / Supply Chain
+  "logistics_coordinator",
+  "supply_chain_analyst",
+  "operations_manager",
+  // Music Publishing
+  "music_producer",
+  "rights_manager",
+  "audio_engineer",
+  "artist_relations",
+  // Software Development
+  "architect",
+  "security_engineer",
+  "data_engineer",
+  "ml_engineer",
+  // Video Game Development
+  "game_designer",
+  "level_designer",
+  "gameplay_programmer",
+  "3d_artist",
 ] as const;
 export type AgentRole = (typeof AGENT_ROLES)[number];
 
@@ -61,6 +119,39 @@ export const AGENT_ROLE_LABELS: Record<AgentRole, string> = {
   devops: "DevOps",
   researcher: "Researcher",
   general: "General",
+  // Biotech
+  scientist: "Scientist",
+  bioinformatician: "Bioinformatician",
+  lab_manager: "Lab Manager",
+  regulatory_specialist: "Regulatory Specialist",
+  // Blockchain / Crypto / Finance
+  blockchain_developer: "Blockchain Developer",
+  smart_contract_auditor: "Smart Contract Auditor",
+  tokenomics_analyst: "Tokenomics Analyst",
+  compliance_officer: "Compliance Officer",
+  // Day Trading / Quant Finance
+  quant_analyst: "Quant Analyst",
+  algo_trader: "Algo Trader",
+  risk_manager: "Risk Manager",
+  // Logistics / Supply Chain
+  logistics_coordinator: "Logistics Coordinator",
+  supply_chain_analyst: "Supply Chain Analyst",
+  operations_manager: "Operations Manager",
+  // Music Publishing
+  music_producer: "Music Producer",
+  rights_manager: "Rights Manager",
+  audio_engineer: "Audio Engineer",
+  artist_relations: "Artist Relations",
+  // Software Development
+  architect: "Architect",
+  security_engineer: "Security Engineer",
+  data_engineer: "Data Engineer",
+  ml_engineer: "ML Engineer",
+  // Video Game Development
+  game_designer: "Game Designer",
+  level_designer: "Level Designer",
+  gameplay_programmer: "Gameplay Programmer",
+  "3d_artist": "3D Artist",
 };
 
 export const AGENT_ICON_NAMES = [

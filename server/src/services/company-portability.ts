@@ -2302,6 +2302,7 @@ function buildManifestFromPackageFiles(
       path: resolvedCompanyPath,
       name: companyName,
       description: asString(companyFrontmatter.description),
+      industry: asString(companyFrontmatter.industry) ?? asString(paperclipCompany.industry) ?? null,
       brandColor: asString(paperclipCompany.brandColor),
       logoPath: asString(paperclipCompany.logoPath) ?? asString(paperclipCompany.logo),
       requireBoardApprovalForNewAgents:
@@ -2934,6 +2935,7 @@ export function companyPortabilityService(db: Db, storage?: StorageService) {
       {
         name: company.name,
         description: company.description ?? null,
+        industry: company.industry ?? null,
         schema: "agentcompanies/v1",
         slug: rootPath,
       },
@@ -3730,6 +3732,7 @@ export function companyPortabilityService(db: Db, storage?: StorageService) {
       const created = await companies.create({
         name: companyName,
         description: include.company ? (sourceManifest.company?.description ?? null) : null,
+        industry: include.company ? (sourceManifest.company?.industry ?? null) : null,
         brandColor: include.company ? (sourceManifest.company?.brandColor ?? null) : null,
         requireBoardApprovalForNewAgents: include.company
           ? (sourceManifest.company?.requireBoardApprovalForNewAgents ?? true)
@@ -3749,6 +3752,7 @@ export function companyPortabilityService(db: Db, storage?: StorageService) {
         const updated = await companies.update(targetCompany.id, {
           name: sourceManifest.company.name,
           description: sourceManifest.company.description,
+          industry: sourceManifest.company.industry,
           brandColor: sourceManifest.company.brandColor,
           requireBoardApprovalForNewAgents: sourceManifest.company.requireBoardApprovalForNewAgents,
         });

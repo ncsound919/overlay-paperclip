@@ -6,6 +6,8 @@ import { useBreadcrumbs } from "../context/BreadcrumbContext";
 import { companiesApi } from "../api/companies";
 import { queryKeys } from "../lib/queryKeys";
 import { formatCents, relativeTime } from "../lib/utils";
+import { COMPANY_INDUSTRY_LABELS } from "@paperclipai/shared";
+import type { CompanyIndustry } from "@paperclipai/shared";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -178,6 +180,11 @@ export function Companies() {
                       >
                         {company.status}
                       </span>
+                      {company.industry && (
+                        <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                          {COMPANY_INDUSTRY_LABELS[company.industry as CompanyIndustry] ?? company.industry}
+                        </span>
+                      )}
                       <Button
                         variant="ghost"
                         size="icon-xs"

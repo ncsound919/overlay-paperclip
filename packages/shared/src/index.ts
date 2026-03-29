@@ -1,5 +1,7 @@
 export {
   COMPANY_STATUSES,
+  COMPANY_INDUSTRIES,
+  COMPANY_INDUSTRY_LABELS,
   DEPLOYMENT_MODES,
   DEPLOYMENT_EXPOSURES,
   AUTH_BASE_URL_MODES,
@@ -68,6 +70,7 @@ export {
   PLUGIN_EVENT_TYPES,
   PLUGIN_BRIDGE_ERROR_CODES,
   type CompanyStatus,
+  type CompanyIndustry,
   type DeploymentMode,
   type DeploymentExposure,
   type AuthBaseUrlMode,

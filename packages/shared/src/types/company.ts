@@ -1,4 +1,4 @@
-import type { CompanyStatus, PauseReason } from "../constants.js";
+import type { CompanyIndustry, CompanyStatus, PauseReason } from "../constants.js";
 
 export interface Company {
   id: string;
@@ -13,6 +13,7 @@ export interface Company {
   spentMonthlyCents: number;
   requireBoardApprovalForNewAgents: boolean;
   brandColor: string | null;
+  industry: CompanyIndustry | null;
   logoAssetId: string | null;
   logoUrl: string | null;
   createdAt: Date;
