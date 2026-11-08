@@ -83,6 +83,15 @@ membership approval. Existing members can self-link; disconnecting an identity
 does not permanently block that member from reconnecting. Guest access remains
 a separate, explicit setting for restricted work.
 
+The person joining runs `/<saved slash command> connect` themselves (for example,
+`/maya connect`), without an `@person` argument. The command discovers their
+identity without starting agent work or granting access. Slack conversation
+agents receive this saved command on each fresh or resumed turn, alongside the
+confirmation and membership-approval instructions. If the saved command is
+unavailable, they refer the connection manager to **Access → Invite people**
+instead of guessing from the agent name. Inviting a person or bot to a Slack
+channel does not grant that person Paperclip access.
+
 **Allowed Channels** updates every five seconds while Slack Settings is open.
 Inviting the bot to a new channel enables replies and writes there automatically;
 no additional Paperclip configuration is required. An explicit off switch stays
@@ -92,6 +101,16 @@ A bare @mention starts a normal agent conversation. Paperclip creates the task,
 subscribes to the Slack thread, and starts the agent; later replies in that thread
 continue the same task without another mention. Normal account and channel access
 rules still apply, and repeated Slack deliveries do not create duplicate tasks.
+
+A native Slack thread keeps the same task in channels and DMs, including after
+the task is Done or Cancelled. A new reply reopens that task with its saved
+comments. DM access settings and task controls still apply to threads inside DMs.
+An explicit `/new` or `/close` starts the next task generation only after its
+control response is delivered. Task completion alone does not release the binding.
+Top-level DMs keep their linear lifecycle and can start a new task after completion.
+For a thread that was split before this fix, later replies continue its latest
+saved task. Earlier tasks remain separate; this change does not merge history
+or copy messages from the surrounding DM into a new thread.
 
 Agents can ask interactive questions in Slack through Paperclip's saved
 `ask_user_questions` interactions. Native runners use `request_human_input`;
@@ -120,11 +139,11 @@ the browser cannot supply a manifest, scopes, or callback destination.
 - Webhook URLs use `PAPERCLIP_CHAT_WEBHOOK_PUBLIC_URL` when configured, otherwise
   the canonical board origin. They end in `/api/chat-webhooks/<publicId>/slack`.
   A separate webhook ingress must route signed webhook requests to the instance.
-- Avatar upload uses a server-derived public preset PNG URL on the canonical
-  board origin (`/api/agent-avatars/cap-v1/<palette>/rest.png?size=512&scale=1&background=paperclip-dark`).
-  Slack must be able to fetch this route without login. It serves preset artwork
-  without company or agent lookup. A failed fetch leaves installation usable and
-  offers manual upload; callers cannot choose an arbitrary image URL.
+- Avatar upload renders the assigned agent's preset PNG on the server and sends
+  its bytes through `apps.icon.set` as multipart form data. Slack does not need to
+  fetch an image from the tenant's authenticated board origin. The image is
+  512 × 512 with the Paperclip dark background. The temporary configuration
+  token stays in the Authorization header and is discarded after setup.
 - Cloud resolves its current canonical origin from its claimed runtime identity.
   Self-hosted deployments use the configured authentication public base URL
   (`PAPERCLIP_AUTH_PUBLIC_BASE_URL` or `PAPERCLIP_PUBLIC_URL`).

@@ -472,13 +472,15 @@ describeEmbeddedPostgres("cost and finance aggregate overflow handling", () => {
       cachedInputTokens: 2_632_998,
       outputTokens: 32_644,
       costCents: 0,
-      occurredAt: new Date("2026-07-13T14:22:54.000Z"),
+      occurredAt: new Date(),
     });
 
     expect(event.costStatus).toBe("unpriced");
     expect(event.inputTokens).toBe(2_732_577);
-    const [agent] = await db.select().from(agents).where(eq(agents.id, agentId));
-    expect(agent?.spentMonthlyCents).toBe(0);
+    expect(await costs.summary(companyId)).toMatchObject({ eventCount: 1, spendCents: 0, spendCentsExact: "0.0000000" });
+    const [usage] = await costs.byAgent(companyId);
+    expect(usage).toMatchObject({ agentId, costCents: 0, inputTokens: 2_732_577,
+      cachedInputTokens: 2_632_998, outputTokens: 32_644 });
   });
 
   it("aggregates cost event sums above int32 without raising Postgres integer overflow", async () => {
@@ -537,6 +539,7 @@ describeEmbeddedPostgres("cost and finance aggregate overflow handling", () => {
         cachedInputTokens: 10,
         outputTokens: 200_000_000,
         costCents: 2_000_000_000,
+        costStatus: "estimated",
         occurredAt: new Date("2026-04-11T00:00:00.000Z"),
       },
     ]);
@@ -555,6 +558,11 @@ describeEmbeddedPostgres("cost and finance aggregate overflow handling", () => {
     expect(byAgentRow?.inputTokens).toBe(3_999_999_990);
     expect(byAgentRow!.inputTokens + byAgentRow!.cachedInputTokens).toBe(4_000_000_000);
     expect(byProjectRow?.costCents).toBe(4_000_000_000);
+    expect(byProjectRow).toMatchObject({ eventCount: 2, estimatedEventCount: 1 });
+    const [firstDayProject] = await costs.byProject(companyId, {
+      ...range, to: new Date("2026-04-10T23:59:59.999Z"),
+    });
+    expect(firstDayProject).toMatchObject({ eventCount: 1, estimatedEventCount: 0 });
     expect(byAgentModelRow?.costCents).toBe(4_000_000_000);
   });
 
